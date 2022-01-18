@@ -92,7 +92,8 @@ function organizeHelper(src, dest) {
 
     if (isFile == true) {
       let fileCategory = getCategory(childNames[i]);
-      console.log(childNames[i] + "   belongs to   " + fileCategory);
+      //console.log(childNames[i] + "   belongs to   " + fileCategory);
+      sendFiles(childAddress , dest , fileCategory)
     }
   }
 }
@@ -114,4 +115,24 @@ function getCategory(name) {
   }
 
   return "others";
+}
+
+function sendFiles(srcFilePath , dest , fileCategory)
+{
+   let catPath = path.join(dest ,fileCategory)
+   //console.log(catPath)
+
+   if(fs.existsSync(catPath)==false) //Checking if the folder donot exist then make the folder
+   {
+       fs.mkdirSync(catPath)
+   }
+
+   let fileName = path.basename(srcFilePath)  //Name of the files
+   let destFilePath = path.join(catPath , fileName) //Destined path for the files in newly created category folder
+
+   fs.copyFileSync(srcFilePath , destFilePath)  //Copied files from src to dest
+
+   fs.unlinkSync(srcFilePath)  //Deleted files from the src
+
+   console.log(fileName + "  is copied to  " + fileCategory)
 }

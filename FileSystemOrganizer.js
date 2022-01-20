@@ -82,19 +82,23 @@ function organizeHelper(src, dest) {
   //WE are checking how many and which types of files are present --> Test Folder
 
   let childNames = fs.readdirSync(src); //Getting all the files and folders presented inside our source
+  
+  for (let i = 0; i < childNames.length; i++) 
+  {
+          let childAddress = path.join(src, childNames[i]);
+          
 
-  for (let i = 0; i < childNames.length; i++) {
-    let childAddress = path.join(src, childNames[i]);
+          //For checking is it folder or a file
+          let isFile = fs.lstatSync(childAddress).isFile();
+          // console.log(isFile)
 
-    //For checking is it folder or a file
-    let isFile = fs.lstatSync(childAddress).isFile();
-    // console.log(isFile)
+          if (isFile == true) 
+          {
+            let fileCategory = getCategory(childNames[i]);
+            //console.log(childNames[i] + "   belongs to   " + fileCategory);
+            sendFiles(childAddress , dest , fileCategory)
+          }
 
-    if (isFile == true) {
-      let fileCategory = getCategory(childNames[i]);
-      //console.log(childNames[i] + "   belongs to   " + fileCategory);
-      sendFiles(childAddress , dest , fileCategory)
-    }
   }
 }
 
@@ -134,5 +138,5 @@ function sendFiles(srcFilePath , dest , fileCategory)
 
    fs.unlinkSync(srcFilePath)  //Deleted files from the src
 
-   console.log(fileName + "  is copied to  " + fileCategory)
+  //  console.log(fileName + "  is copied to  " + fileCategory)
 }
